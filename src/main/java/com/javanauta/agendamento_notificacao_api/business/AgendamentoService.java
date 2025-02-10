@@ -1,5 +1,6 @@
 package com.javanauta.agendamento_notificacao_api.business;
 
+import com.javanauta.agendamento_notificacao_api.exception.NotFoundException;
 import com.javanauta.agendamento_notificacao_api.mapper.IAgendamentoMapper;
 import com.javanauta.agendamento_notificacao_api.dto.in.AgendamentoRecord;
 import com.javanauta.agendamento_notificacao_api.dto.out.AgendamentoRecordOut;
@@ -16,7 +17,12 @@ public class AgendamentoService {
 
     private final IAgendamentoMapper agendamentoMapper;
 
-    public AgendamentoRecordOut gravarAgendamento(AgendamentoRecord agendamento){
+    public AgendamentoRecordOut gravarAgendamento(AgendamentoRecord agendamento) {
         return agendamentoMapper.paraOut(repository.save(agendamentoMapper.paraEntity(agendamento)));
+    }
+
+    public AgendamentoRecordOut buscarAgendamentosPorId(Long id) {
+        return agendamentoMapper.paraOut(repository.findById(id)
+                .orElseThrow(()-> new NotFoundException("ID não encontrado")));
     }
 }
